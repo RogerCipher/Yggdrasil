@@ -1,0 +1,139 @@
+/*
+--------------------------------------------------------
+by: Rogério Chaves (AKA CandyCrayon), 2021
+//    __                       __                       
+//   /  )             /       /  )                      
+//  /   __.  ____  __/ __  , /   __  __.  __  , __ ____ 
+// (__/(_/|_/ / <_(_/_/ (_/_(__// (_(_/|_/ (_/_(_)/ / <_
+//                       /                  /           
+//                      '                  '            
+--------------------------------------------------------
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "linkedList.h"
+#include "tree.h"
+#include "common.h"
+
+TipoElementoLinkedList *criarElemento()
+{
+    //alocar o espaco na memoria para um elemento
+    TipoElementoLinkedList *elem = (TipoElementoLinkedList *)malloc(sizeof(TipoElementoLinkedList));
+
+    //meter tudo a "NULL"
+    elem->folha = NULL;
+    elem->proximo = NULL;
+    elem->anterior = NULL;
+
+    return elem;
+}
+
+int temProximo(TipoElementoLinkedList *elem) //retorna 1 se tiver proximo, 0 se nao tiver
+{
+    if(elem->proximo == NULL)
+    {
+        return 0;
+    }
+    return 1;
+}
+int temAnterior(TipoElementoLinkedList *elem)//retorna 1 se tiver anterior, 0 se nao tiver
+{
+    if(elem->anterior == NULL)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+TipoLinkedList *criarList()
+{
+    //alocar o espaco na memoria para a linked list
+    TipoLinkedList *list = (TipoLinkedList *)malloc(sizeof(TipoLinkedList));
+
+    //meter tudo a "NULL"
+    list->cabeca = NULL;
+    list->iterador = NULL;
+    list->indexElementoActual = -1;
+    list->len = 0;
+}
+
+int resetIterPosition(TipoLinkedList *list)
+{
+    if(list->cabeca == NULL)
+    {
+        //a lista ainda nao tem elementos, nao vamos fazer nada
+        return 0;
+    }
+
+    list->iterador = list->cabeca;
+    list->indexElementoActual = 0;
+    return 1;
+}
+
+
+int moverIterParaProximo(TipoLinkedList *list)
+{
+    if(!temProximo(list->iterador))
+    {
+        //nao ha proximo elemento
+        return 0;
+    }
+    list->iterador = list->iterador->proximo;
+    list->indexElementoActual++;
+    return 1;
+}
+
+int moverIterParaAnterior(TipoLinkedList *list)
+{
+    if(!temAnterior(list->iterador))
+    {
+        //nao ha elemento anterior (estamos na cabeca)
+        return 0;
+    }
+    list->iterador = list->iterador->anterior;
+    list->indexElementoActual--;
+    return 1;
+}
+
+int tamanhoLinkedList(TipoLinkedList *list) //da refresh e retorna o tamanho da linked list
+{
+    if(!resetIterPosition(list))
+    {
+        //a lista ainda nao tem elementos
+        return 0;
+    }
+    //dar refresh e retornar quantos elementos a linked list tem
+    int tamanho = 0;
+    while (temProximo(list->iterador))
+    {
+        moverIterParaProximo(list);
+        tamanho++;
+    }
+    list->len = tamanho;
+    return list->len;
+    
+}
+
+void imprimirLista(TipoLinkedList *list)
+{
+    resetIterPosition(list);
+    if(list->cabeca == NULL)
+    {
+        //esta lista esta vazia
+        printf("tentativa de imprimir uma lista sem nada.\n");
+    }
+    for(int i = 0; i < list->len; i++)
+    {
+        printf("elemento: %d, valor: ", i);
+        if(list->iterador->folha != NULL)
+        {
+            printf("%d\n", list->iterador->folha->data.valor);
+        }
+        else
+        {
+            //esta folha nao tem nada
+            printf("nada\n");
+        } 
+    }
+}
