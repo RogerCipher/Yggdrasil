@@ -29,6 +29,14 @@ TipoElementoLinkedList *criarElemento()
     return elem;
 }
 
+
+TipoElementoLinkedList *criarElementoComFolha(TipoFolha *folha)
+{
+    TipoElementoLinkedList *elem = criarElemento();
+    elem->folha = folha;
+    return elem;
+}
+
 int temProximo(TipoElementoLinkedList *elem) //retorna 1 se tiver proximo, 0 se nao tiver
 {
     if(elem->proximo == NULL)
@@ -56,6 +64,8 @@ TipoLinkedList *criarList()
     list->iterador = NULL;
     list->indexElementoActual = -1;
     list->len = 0;
+
+    return list;
 }
 
 int resetIterPosition(TipoLinkedList *list)
@@ -115,6 +125,33 @@ int tamanhoLinkedList(TipoLinkedList *list) //da refresh e retorna o tamanho da 
     
 }
 
+int adicionarElementoFinal(TipoLinkedList *list, TipoElementoLinkedList *elem)
+{
+    if(list->cabeca == NULL)
+    {
+        //estamos no primeiro elemento da lista
+        list->cabeca = elem;
+        list->iterador = list->cabeca;
+        list->indexElementoActual = 0;
+        list->len = 1;
+        return 1;
+    }
+
+    //ja existem elementos, por isso vamos mover o iterador ate ao final
+    while(temProximo(list->iterador))
+    {
+        moverIterParaProximo(list);
+    }
+
+    list->iterador->proximo = elem;
+    list->iterador->proximo->anterior = list->iterador;
+    list->len++;
+
+    resetIterPosition(list);
+
+    return 1;
+}
+
 void imprimirLista(TipoLinkedList *list)
 {
     resetIterPosition(list);
@@ -129,6 +166,7 @@ void imprimirLista(TipoLinkedList *list)
         if(list->iterador->folha != NULL)
         {
             printf("%d\n", list->iterador->folha->data.valor);
+            moverIterParaProximo(list);
         }
         else
         {

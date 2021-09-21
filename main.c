@@ -22,7 +22,15 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 int main()
 {
     TipoLinkedList *lista = criarList();
+
+    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(1)));
+    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(2)));
+    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(3)));
+    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(4)));
+
+
     imprimirLista(lista);
-    printf("x\n");
+    printf("length da lista: %d", lista->len);
+    printf("\nx\n");
     return 0;
 }

@@ -1,6 +1,7 @@
 #ifndef __LINKEDLIST_H__
 #define __LINKEDLIST_H__
 
+#include "tree.h"
 /*---------------- estruturas --------------------*/
 
 //estrutura para guardar um elemento numa linked list com informacao de um elemento da arvore
@@ -24,6 +25,8 @@ typedef struct TipoLL
 /*---------- funcoes --------------*/
 TipoElementoLinkedList *criarElemento();
 
+TipoElementoLinkedList *criarElementoComFolha(TipoFolha *folha);
+
 int temProximo(TipoElementoLinkedList *elem);
 int temAnterior(TipoElementoLinkedList *elem);
 
@@ -32,6 +35,8 @@ int resetIterPosition(TipoLinkedList *list);
 int moverIterParaProximo(TipoLinkedList *list);
 int moverIterParaAnterior(TipoLinkedList *list);
 int tamanhoLinkedList(TipoLinkedList *list);
+
+int adicionarElementoFinal(TipoLinkedList *list, TipoElementoLinkedList *elem);
 
 
 /*---debugging stuff---*/

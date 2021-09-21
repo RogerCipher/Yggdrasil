@@ -14,8 +14,23 @@ typedef struct TipoF
 {
     struct TipoF *parent; //parent da folha
     struct TipoLinkedList *children; //lista de filhos desta folha
+    int nivelDaFolha;
     TipoData data; //informacao sobre a folha actual
 }TipoFolha;
 
+
+typedef struct 
+{
+    TipoFolha *raiz;
+
+    //adicionar mais cenas depois (tipo quantos niveis tem)
+}TipoArvore;
+
+
+TipoFolha *criarFolha();
+TipoFolha *criarFolhaComInt(int valor);
+
+TipoArvore *criarArvore();
+TipoArvore *criarArvoreComRaiz(TipoFolha *raiz);
 
 #endif
