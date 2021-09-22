@@ -67,6 +67,9 @@ int main(int argc, char *argv[])
     }
     TipoArvore *arvore = carregarArvoreDeFicheiro(argv[1]);
 
+    limparEcra();
+    mostrarBanner();
+
     imprimirArvore(arvore);
     freeArvore(arvore);
 

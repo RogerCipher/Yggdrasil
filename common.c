@@ -18,20 +18,12 @@ void mostrarBanner()
 {
     printf("\n----------------------------------");
     printf("\n");
+    printf("     __ __           _             _ _ \n");
+    printf("    |  |  |___ ___ _| |___ ___ ___|_| |\n");
+    printf("    |_   _| . | . | . |  _| .'|_ -| | |\n");
+    printf("      |_| |_  |_  |___|_| |__,|___|_|_|\n");
+    printf("          |___|___|                    \n");
     printf("\n");
-    printf("\n");
-    printf("\n");
-    printf("\n");
-    printf("\n");
-    printf("*       ___  _  ______                        ");
-    printf("\n");
-    printf("*      / _ \\/ |/ / __/ ___ ___ _____ ______ __");
-    printf("\n");
-    printf("*     / // /    /\\ \\  / _ `/ // / -_) __/ // /");
-    printf("\n");
-    printf("*    /____/_/|_/___/  \\_, /\\_,_/\\__/_/  \\_, / ");
-    printf("\n");
-    printf("*                      /_/             /___/  ");
-    printf("\n");
-    printf("* \n");
+    printf("* Version: Alpha\n");
+    printf("-----------\n");
 }
