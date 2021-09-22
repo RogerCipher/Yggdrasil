@@ -12,6 +12,7 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "tree.h"
 
@@ -249,6 +250,7 @@ TipoArvore *criarArvore()
 {
     TipoArvore *arvore = (TipoArvore *)malloc(sizeof(TipoArvore));
     arvore->raiz = NULL;
+    arvore->iterador = NULL;
     return arvore;
 }
 
@@ -257,6 +259,7 @@ TipoArvore *criarArvoreComRaiz(TipoFolha *raiz)
     TipoArvore *arvore = (TipoArvore *)malloc(sizeof(TipoArvore));
     arvore->raiz = raiz;
     arvore->raiz->nivelDaFolha = 0;
+    arvore->iterador = arvore->raiz;
     return arvore;
 }
 
@@ -276,6 +279,62 @@ int adicionarFilho(TipoFolha *folhaPai, TipoFolha *folhaFilho)
     folhaFilho->nivelDaFolha = folhaPai->nivelDaFolha+1;
 
     return 1;
+}
+
+
+TipoArvore *carregarArvoreDeFicheiro(char *fileName)
+{
+    char buffer[maxTreeElements*3];
+
+    FILE *fp;
+    fp = fopen(fileName, "r");
+    fscanf(fp, "%s", buffer);
+
+
+    //sabemos que a primeira vai sempre ser a raiz
+    TipoArvore *arvore = criarArvoreComRaiz(criarFolhaComInt(buffer[0]));
+
+    printf("node actual criado com o valor: %c\n", arvore->raiz->data.valor);
+
+    //TODO: METER O ITERADOR COMO "NODE ACTUAL" PARA O RESTO DESTA FUNCAO:
+
+    for(int i = 1; i < strlen(buffer); i++)
+    {
+        printf("%c", buffer[i]);
+        
+
+
+        if(buffer[i] == '(')
+        {
+            adicionarFilho(nodeActual, criarNode(buffer[i+1]);
+            i++;
+            
+            //encontrar o ultimo filho do node actual
+            int j = 1;
+            while (nodeActual->children[j] != NULL)
+            {
+                j++;
+            }
+
+            //ir para o ultimo filho do node actual
+            nodeActual = nodeActual->children[j-1];
+        }
+        if(buffer[i] == ')')
+        {
+            //ir para o node "pai"
+            nodeActual = nodeActual->parent;
+        }
+    }
+
+    //voltar a raiz para dar return dela desta funcao
+    while(nodeActual->parent != NULL)
+    {
+        nodeActual = nodeActual->parent;
+    }
+
+
+    printf("\n");
+    fclose(fp);
 }
 
 

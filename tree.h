@@ -46,7 +46,7 @@ typedef struct TipoF
 typedef struct 
 {
     TipoFolha *raiz;
-
+    TipoFolha *iterador;
     //adicionar mais cenas depois (tipo quantos niveis tem)
 }TipoArvore;
 
@@ -77,6 +77,8 @@ void imprimirLista(TipoLinkedList *list);
 
 
 /*---------------------------FUNCOES PARA ARVORE--------------------------------------------*/
+#define maxTreeElements 1024
+
 
 TipoFolha *criarFolha();
 TipoFolha *criarFolhaComInt(int valor);
@@ -86,6 +88,8 @@ TipoArvore *criarArvoreComRaiz(TipoFolha *raiz);
 
 
 int adicionarFilho(TipoFolha *folhaPai, TipoFolha *folhaFilho);
+
+TipoArvore *carregarArvoreDeFicheiro(char *fileName);
 
 int freeFolha(TipoFolha *folha);
 int freeArvore(TipoArvore *arvore);
