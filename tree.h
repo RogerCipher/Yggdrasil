@@ -69,6 +69,9 @@ int tamanhoLinkedList(TipoLinkedList *list);
 int adicionarElementoFinal(TipoLinkedList *list, TipoElementoLinkedList *elem);
 
 
+int apagarUltimoElemento(TipoLinkedList * list);
+int freeLinkedList(TipoLinkedList *list);
+
 //debugging stuff
 void imprimirLista(TipoLinkedList *list);
 
@@ -83,6 +86,9 @@ TipoArvore *criarArvoreComRaiz(TipoFolha *raiz);
 
 
 int adicionarFilho(TipoFolha *folhaPai, TipoFolha *folhaFilho);
+
+int freeFolha(TipoFolha *folha);
+int freeArvore(TipoArvore *arvore);
 
 void imprimirFilhos(TipoFolha *folha);
 void imprimirArvore(TipoArvore *arvore);

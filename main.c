@@ -43,6 +43,18 @@ int main()
 
     
     imprimirArvore(arvore);
+
+    apagarUltimoElemento(arvore->raiz->children);
+
+    imprimirArvore(arvore);
+
+    /*apagarUltimoElemento(arvore->raiz->children);
+    apagarUltimoElemento(arvore->raiz->children);
+    apagarUltimoElemento(arvore->raiz->children);*/
+    freeLinkedList(arvore->raiz->children);
+    
+    imprimirArvore(arvore);
+    freeArvore(arvore);
     printf("\nx\n");
     return 0;
 }

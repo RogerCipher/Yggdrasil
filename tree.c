@@ -115,7 +115,7 @@ int tamanhoLinkedList(TipoLinkedList *list) //da refresh e retorna o tamanho da 
         return 0;
     }
     //dar refresh e retornar quantos elementos a linked list tem
-    int tamanho = 0;
+    int tamanho = 1;
     while (temProximo(list->iterador))
     {
         moverIterParaProximo(list);
@@ -153,17 +153,70 @@ int adicionarElementoFinal(TipoLinkedList *list, TipoElementoLinkedList *elem)
     return 1;
 }
 
+int apagarUltimoElemento(TipoLinkedList * list)
+{
+    if(list->cabeca == NULL)
+    {
+        printf("tentativa de apagar o ultimo elemento de uma lista sem elementos\n");
+        return 0;
+    }
+
+
+    resetIterPosition(list);
+    //ir ate ao ultimo elemento
+    while(temProximo(list->iterador))
+    {
+        moverIterParaProximo(list);
+    }
+
+    //dar free da folha
+    freeFolha(list->iterador->folha);
+
+    //apagar as outras conexoes
+    if(list->iterador->anterior != NULL)
+    {
+        list->iterador->anterior->proximo = NULL;
+    }
+    list->iterador->anterior = NULL;
+
+    //dar free do elemento, seguido de dar reset do iterador e refresh do tamanho da linkedlist
+    free(list->iterador);
+    resetIterPosition(list);
+    tamanhoLinkedList(list);
+
+    return 1;
+}
+
+int freeLinkedList(TipoLinkedList *list)
+{
+    int quantidadeElementos = list->len;
+
+    list->cabeca->folha->parent->children = NULL;
+
+    for(int i = 0; i < quantidadeElementos; i++)
+    {
+        apagarUltimoElemento(list);
+    }
+
+    list->indexElementoActual = -1;
+    list->iterador = NULL;
+    list->cabeca = NULL;
+    list->len = 0;
+
+    free(list);
+    return 1;
+}
+
+
 void imprimirLista(TipoLinkedList *list)
 {
     resetIterPosition(list);
     if(list->cabeca == NULL)
     {
         //esta lista esta vazia
-        printf("tentativa de imprimir uma lista sem nada.\n");
     }
     for(int i = 0; i < list->len; i++)
     {
-        printf("elemento: %d, valor: ", i);
         if(list->iterador->folha != NULL)
         {
             printf("%d\n", list->iterador->folha->data.valor);
@@ -172,8 +225,7 @@ void imprimirLista(TipoLinkedList *list)
         else
         {
             //esta folha nao tem nada
-            printf("nada\n");
-        } 
+        }
     }
 }
 
@@ -227,19 +279,53 @@ int adicionarFilho(TipoFolha *folhaPai, TipoFolha *folhaFilho)
 }
 
 
+int freeFolha(TipoFolha *folha)
+{
+    if(folha->children != NULL)
+    {
+        //vamos ter que apagar os filhos primeiro
+        freeLinkedList(folha->children);
+    }
+
+    free(folha);
+
+    return 1;
+}
+
+int freeArvore(TipoArvore *arvore)
+{
+    if(arvore->raiz == NULL)
+    {
+        free(arvore);
+        return 1;
+    }
+
+    freeFolha(arvore->raiz);
+    arvore->raiz = NULL;
+    free(arvore);
+
+    return 1;
+
+}
+
+
+
 void imprimirFilhos(TipoFolha *folha)
 {
     if(folha->children == NULL)
     {
-        //nao tem filhos
+        //printf("nao tem filhos\n");
         return;
     }
-
+    tamanhoLinkedList(folha->children);
+    resetIterPosition(folha->children);
     for(int i = 0; i < folha->children->len; i++)
     {
-        resetIterPosition(folha->children);
-        printf(" %d ", folha->children->iterador->folha->data.valor);
-        moverIterParaProximo(folha->children);
+        printf(" filho nr %d : %d \n", i, folha->children->iterador->folha->data.valor);
+        if(!moverIterParaProximo(folha->children))
+        {
+            break;
+        }
     }
     printf("||");
 }
@@ -248,8 +334,16 @@ void imprimirFilhos(TipoFolha *folha)
 
 void imprimirArvore(TipoArvore *arvore)
 {
+    if(arvore->raiz == NULL)
+    {
+        return;
+    }
     printf("raiz: %d\n", arvore->raiz->data.valor);
 
-    imprimirFilhos(arvore->raiz);
+    if(arvore->raiz->children != NULL)
+    {
+        imprimirFilhos(arvore->raiz);
+    }
+    
 }
 
