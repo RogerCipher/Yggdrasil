@@ -12,15 +12,17 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 
 
 #include <stdio.h>
-
+#include <stdlib.h>
 
 #include "tree.h" //para as arvores
-#include "linkedList.h" //para as linked lists
 #include "common.h" //para tudo o que e comum
 
 
 int main()
 {
+
+    #if 0
+    //debugging para a linked list
     TipoLinkedList *lista = criarList();
 
     adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(1)));
@@ -28,9 +30,19 @@ int main()
     adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(3)));
     adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(4)));
 
-
     imprimirLista(lista);
-    printf("length da lista: %d", lista->len);
+    #endif
+
+    TipoArvore *arvore = criarArvoreComRaiz(criarFolhaComInt(10));
+
+    adicionarFilho(arvore->raiz, criarFolhaComInt(1));
+    adicionarFilho(arvore->raiz, criarFolhaComInt(2));
+    adicionarFilho(arvore->raiz, criarFolhaComInt(3));
+    adicionarFilho(arvore->raiz, criarFolhaComInt(4));
+
+
+    
+    imprimirArvore(arvore);
     printf("\nx\n");
     return 0;
 }
