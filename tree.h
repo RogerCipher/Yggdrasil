@@ -1,6 +1,8 @@
 #ifndef __TREE_H__
 #define __TREE_H__
 
+#include "common.h"
+
 /*------------ESTRUTURA PARA DADOS-------------*/
 
 //estrutura para a data que queremos guardar em cada folha da arvore

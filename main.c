@@ -18,7 +18,7 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 #include "common.h" //para tudo o que e comum
 
 
-int main()
+int main(int argc, char *argv[])
 {
 
     #if 0
@@ -33,6 +33,7 @@ int main()
     imprimirLista(lista);
     #endif
 
+    #if 0
     TipoArvore *arvore = criarArvoreComRaiz(criarFolhaComInt(10));
 
     adicionarFilho(arvore->raiz, criarFolhaComInt(1));
@@ -55,6 +56,20 @@ int main()
     
     imprimirArvore(arvore);
     freeArvore(arvore);
+    #endif
+
+
+
+    if(argc != 2)
+    {
+        printf("Usage: %s <fileOfTree> \n", argv[0]);
+        error("");
+    }
+    TipoArvore *arvore = carregarArvoreDeFicheiro(argv[1]);
+
+    imprimirArvore(arvore);
+    freeArvore(arvore);
+
     printf("\nx\n");
     return 0;
 }

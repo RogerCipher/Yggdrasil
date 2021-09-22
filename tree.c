@@ -287,54 +287,53 @@ TipoArvore *carregarArvoreDeFicheiro(char *fileName)
     char buffer[maxTreeElements*3];
 
     FILE *fp;
+
     fp = fopen(fileName, "r");
+    if(fp == NULL)
+    {
+        error("");
+    }
+
     fscanf(fp, "%s", buffer);
 
 
     //sabemos que a primeira vai sempre ser a raiz
-    TipoArvore *arvore = criarArvoreComRaiz(criarFolhaComInt(buffer[0]));
+    TipoArvore *arvore = criarArvoreComRaiz(criarFolhaComInt(atoi(buffer)));
 
-    printf("node actual criado com o valor: %c\n", arvore->raiz->data.valor);
+    printf("raiz criada com o valor: %d\n", arvore->raiz->data.valor);
 
     //TODO: METER O ITERADOR COMO "NODE ACTUAL" PARA O RESTO DESTA FUNCAO:
 
     for(int i = 1; i < strlen(buffer); i++)
     {
-        printf("%c", buffer[i]);
-        
-
-
+        //printf("%c", buffer[i]);
         if(buffer[i] == '(')
         {
-            adicionarFilho(nodeActual, criarNode(buffer[i+1]);
+            adicionarFilho(arvore->iterador, criarFolhaComInt(atoi(buffer+i+1)));
             i++;
-            
-            //encontrar o ultimo filho do node actual
-            int j = 1;
-            while (nodeActual->children[j] != NULL)
-            {
-                j++;
-            }
 
-            //ir para o ultimo filho do node actual
-            nodeActual = nodeActual->children[j-1];
+            //ir para o ultimo filho da folha actual
+            while(temProximo(arvore->iterador->children->iterador))
+            {
+                moverIterParaProximo(arvore->iterador->children);
+            }
+            //meter o iterador da arvore igual a este filho
+            arvore->iterador = arvore->iterador->children->iterador->folha;
+
         }
         if(buffer[i] == ')')
         {
             //ir para o node "pai"
-            nodeActual = nodeActual->parent;
+            arvore->iterador = arvore->iterador->parent;
         }
     }
 
-    //voltar a raiz para dar return dela desta funcao
-    while(nodeActual->parent != NULL)
-    {
-        nodeActual = nodeActual->parent;
-    }
 
 
-    printf("\n");
+    printf("\ncarregado:\n");
     fclose(fp);
+
+    return arvore;
 }
 
 
@@ -371,9 +370,11 @@ int freeArvore(TipoArvore *arvore)
 
 void imprimirFilhos(TipoFolha *folha)
 {
+    printf("pai: %d\n", folha->data.valor);
+
     if(folha->children == NULL)
     {
-        //printf("nao tem filhos\n");
+        printf(" nao tem filhos\n");
         return;
     }
     tamanhoLinkedList(folha->children);
@@ -386,7 +387,19 @@ void imprimirFilhos(TipoFolha *folha)
             break;
         }
     }
-    printf("||");
+    tamanhoLinkedList(folha->children);
+    resetIterPosition(folha->children);
+    
+    for(int i = 0; i < folha->children->len; i++)
+    {
+        imprimirFilhos(folha->children->iterador->folha);
+        if(!moverIterParaProximo(folha->children))
+        {
+            break;
+        }
+    }
+
+    return;
 }
 
 
@@ -397,12 +410,8 @@ void imprimirArvore(TipoArvore *arvore)
     {
         return;
     }
-    printf("raiz: %d\n", arvore->raiz->data.valor);
 
-    if(arvore->raiz->children != NULL)
-    {
-        imprimirFilhos(arvore->raiz);
-    }
+    imprimirFilhos(arvore->raiz);
     
 }
 
