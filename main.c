@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
     mostrarBanner();
 
     imprimirArvore(arvore);
+
+    imprimirArvore_graphviz(arvore->raiz);
+
     freeArvore(arvore);
 
     printf("\nx\n");

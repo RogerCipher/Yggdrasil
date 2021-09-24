@@ -98,5 +98,6 @@ int freeArvore(TipoArvore *arvore);
 
 void imprimirFilhos(TipoFolha *folha);
 void imprimirArvore(TipoArvore *arvore);
+void imprimirArvore_graphviz(TipoFolha *folha);
 
 #endif
