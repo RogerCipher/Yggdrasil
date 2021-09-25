@@ -15,6 +15,7 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 #include <string.h>
 
 #include "tree.h"
+#include "common.h"
 
 /*---------------------------FUNCOES PARA LINKED LIST---------------------------------------------*/
 
@@ -22,6 +23,12 @@ TipoElementoLinkedList *criarElemento()
 {
     //alocar o espaco na memoria para um elemento
     TipoElementoLinkedList *elem = (TipoElementoLinkedList *)malloc(sizeof(TipoElementoLinkedList));
+
+    if(elem == NULL)
+    {
+        //nao conseguimos alocar memoria
+        error("couldnt alocate memory for linked list element.\n");
+    }
 
     //meter tudo a "NULL"
     elem->folha = NULL;
@@ -60,6 +67,12 @@ TipoLinkedList *criarList()
 {
     //alocar o espaco na memoria para a linked list
     TipoLinkedList *list = (TipoLinkedList *)malloc(sizeof(TipoLinkedList));
+
+    if(list == NULL)
+    {
+        //nao conseguimos alocar memoria
+        error("couldnt alocate memory for linked list.\n");
+    }
 
     //meter tudo a "NULL"
     list->cabeca = NULL;
@@ -234,6 +247,13 @@ void imprimirLista(TipoLinkedList *list)
 TipoFolha *criarFolha()
 {
     TipoFolha *folha = (TipoFolha *)malloc(sizeof(TipoFolha));
+
+    if(folha == NULL)
+    {
+        //nao conseguimos alocar memoria
+        error("couldnt alocate memory for leaf node.\n");
+    }
+
     folha->children = NULL;
     folha->parent = NULL;
     return folha;
@@ -249,6 +269,11 @@ TipoFolha *criarFolhaComInt(int valor)
 TipoArvore *criarArvore()
 {
     TipoArvore *arvore = (TipoArvore *)malloc(sizeof(TipoArvore));
+    if(arvore == NULL)
+    {
+        //nao conseguimos alocar memoria
+        error("couldnt alocate memory for tree.\n");
+    }
     arvore->raiz = NULL;
     arvore->iterador = NULL;
     return arvore;
@@ -257,6 +282,12 @@ TipoArvore *criarArvore()
 TipoArvore *criarArvoreComRaiz(TipoFolha *raiz)
 {
     TipoArvore *arvore = (TipoArvore *)malloc(sizeof(TipoArvore));
+    if(arvore == NULL)
+    {
+        //nao conseguimos alocar memoria
+        error("couldnt alocate memory for tree.\n");
+    }
+
     arvore->raiz = raiz;
     arvore->raiz->nivelDaFolha = 0;
     arvore->iterador = arvore->raiz;
@@ -402,8 +433,6 @@ void imprimirFilhos(TipoFolha *folha)
     return;
 }
 
-
-
 void imprimirArvore(TipoArvore *arvore)
 {
     if(arvore->raiz == NULL)
@@ -414,7 +443,6 @@ void imprimirArvore(TipoArvore *arvore)
     imprimirFilhos(arvore->raiz);
     
 }
-
 
 // Print the tree in graphviz format
 void imprimirArvore_graphviz(TipoFolha *folha) {
