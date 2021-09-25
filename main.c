@@ -13,6 +13,7 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "tree.h" //para as arvores
 #include "common.h" //para tudo o que e comum
@@ -21,58 +22,59 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 int main(int argc, char *argv[])
 {
 
-    #if 0
-    //debugging para a linked list
-    TipoLinkedList *lista = criarList();
 
-    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(1)));
-    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(2)));
-    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(3)));
-    adicionarElementoFinal(lista, criarElementoComFolha(criarFolhaComInt(4)));
-
-    imprimirLista(lista);
-    #endif
-
-    #if 0
-    TipoArvore *arvore = criarArvoreComRaiz(criarFolhaComInt(10));
-
-    adicionarFilho(arvore->raiz, criarFolhaComInt(1));
-    adicionarFilho(arvore->raiz, criarFolhaComInt(2));
-    adicionarFilho(arvore->raiz, criarFolhaComInt(3));
-    adicionarFilho(arvore->raiz, criarFolhaComInt(4));
-
-
-    
-    imprimirArvore(arvore);
-
-    apagarUltimoElemento(arvore->raiz->children);
-
-    imprimirArvore(arvore);
-
-    /*apagarUltimoElemento(arvore->raiz->children);
-    apagarUltimoElemento(arvore->raiz->children);
-    apagarUltimoElemento(arvore->raiz->children);*/
-    freeLinkedList(arvore->raiz->children);
-    
-    imprimirArvore(arvore);
-    freeArvore(arvore);
-    #endif
-
-
-
-    if(argc != 2)
+    if(argc < 2)
     {
-        printf("Usage: %s <fileOfTree> \n", argv[0]);
-        error("");
+        printf("Usage: %s <fileOfTree> <options>\n", argv[0]);
+        printf("options: \n");
+
+        printf(" -i -> prints information of loaded tree\n");
+        printf(" -g -> prints graphviz format of tree\n");
+        error("<fileOfTree> argument not given\n");
     }
     TipoArvore *arvore = carregarArvoreDeFicheiro(argv[1]);
+
+    //options in args
+    int optImprimirArvore = 0;
+    int optImprimirGraphviz = 0;
 
     limparEcra();
     mostrarBanner();
 
-    imprimirArvore(arvore);
 
-    imprimirArvore_graphviz(arvore->raiz);
+    //arg option handling
+    for(int i = 2; i < argc; i++)
+    {
+
+        if(!strcmp(argv[i], "-i"))
+        {
+            optImprimirArvore = 1;
+        }
+
+        else if(!strcmp(argv[i], "-g"))
+        {
+            optImprimirGraphviz = 1;
+        }
+
+        else
+        {
+            printf("argument %s not an option\n", argv[i]);
+            error("argument given not defined.\n");
+        }
+    }
+
+    if(optImprimirArvore)
+    {
+        imprimirArvore(arvore);
+    }
+
+    if(optImprimirGraphviz)
+    {
+        imprimirArvore_graphviz(arvore->raiz);
+    }
+
+
+
 
     freeArvore(arvore);
 
