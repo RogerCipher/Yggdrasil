@@ -416,33 +416,34 @@ void imprimirArvore(TipoArvore *arvore)
 }
 
 
-
-//TODO: THIS IS BUGGED, EITHER FIX IT OR MOVE ON
 // Print the tree in graphviz format
 void imprimirArvore_graphviz(TipoFolha *folha) {
-    if (folha->parent == NULL) {
+
+
+    if (folha->parent != NULL) {
+        printf("\tn%p [label = \"%d\"]\n", folha, folha->data.valor);
+        printf("\tn%p -- n%p\n", folha->parent, folha);
+    }
+    else
+    {
         printf("Copy the following code to https://dreampuf.github.io/GraphvizOnline\n");
         printf("graph {\n");
-    }
-    if (folha == NULL) {
-        printf("\tn%p [label = \"\"]\n", folha);
-    } else {
         printf("\tn%p [label = \"%d\"]\n", folha, folha->data.valor);
-    }
-    if (folha->parent != NULL) {
-        printf("\tn%p -- n%p\n", folha->parent, folha);
     }
 
     if(folha->children != NULL)
     {
         resetIterPosition(folha->children);
-        int tamanho = tamanhoLinkedList(folha->children);
-        for (int i = 0; i < tamanho; i++) {
+        while(temProximo(folha->children->iterador))
+        {
             if (folha->children->iterador != NULL) {
                 imprimirArvore_graphviz(folha->children->iterador->folha);
             }
             moverIterParaProximo(folha->children);
         }
+
+        //imprimir o ultimo elemento (nao tem proximo)
+        imprimirArvore_graphviz(folha->children->iterador->folha);
     }
 
     if (folha->parent == NULL) {
