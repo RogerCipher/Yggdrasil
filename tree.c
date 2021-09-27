@@ -21,7 +21,8 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 int adicionarFilho(TipoFolha *parent, TipoFolha *child) 
 {
     child->parent = parent;
-    if (parent == NULL) {
+    if (parent == NULL) 
+    {
         //criamos a raiz
         return 0;
     }
@@ -29,7 +30,7 @@ int adicionarFilho(TipoFolha *parent, TipoFolha *child)
     {
         //primeiro filho
         parent->children = child;
-    } 
+    }
     else 
     {
         //nao é o primeiro filho, vamos iterar ate ao ultimo filho
@@ -76,7 +77,7 @@ TipoFolha *novaFolha(TipoFolha *parent)
     return novoElem;
 }
 
-void imprimirGraphviz(TipoFolha *elem) 
+void imprimirGraphviz(TipoFolha *elem)
 {
     if (elem->parent == NULL) 
     {

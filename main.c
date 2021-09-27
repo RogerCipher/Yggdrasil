@@ -62,8 +62,6 @@ int main(int argc, char *argv[])
     }
 
 
-
-
     freeArvore(raiz);
 
     printf("\nx\n");
