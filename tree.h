@@ -8,29 +8,9 @@
 //estrutura para a data que queremos guardar em cada folha da arvore
 typedef struct TipoD
 {
-    int valor;
+    int value;
 }TipoData;
 
-
-/*---------------------------ESTRUTURAS PARA LINKED LIST---------------------------------------------*/
-
-
-//estrutura para guardar um elemento numa linked list com informacao de um elemento da arvore
-typedef struct TipoELL
-{
-    struct TipoELL *proximo;
-    struct TipoELL *anterior;
-    struct TipoF *folha;
-}TipoElementoLinkedList;
-
-//estrutura para uma linked list que guarda um elemento da arvore
-typedef struct TipoLL
-{
-    TipoElementoLinkedList *cabeca; //primeiro elemento da linked list
-    TipoElementoLinkedList *iterador; //elemento em que estamos actualmente na linked list
-    int indexElementoActual; //index do elemento que estamos actualmente  na linked list
-    int len; //tamanho da linked list
-}TipoLinkedList;
 
 /*---------------------------ESTRUTURAS PARA A ARVORE---------------------------------------------*/
 
@@ -39,65 +19,18 @@ typedef struct TipoLL
 typedef struct TipoF
 {
     struct TipoF *parent; //parent da folha
-    TipoLinkedList *children; //lista de filhos desta folha
+    struct TipoF *children; //primeiro filho desta folha
+    struct TipoF *siblings; //irmaos desta folha, aka: pointer para o proximo filho do parent
+    
     int nivelDaFolha;
-    TipoData data; //informacao sobre a folha actual
+    TipoData *data; //informacao sobre a folha actual
 }TipoFolha;
 
-
-typedef struct 
-{
-    TipoFolha *raiz;
-    TipoFolha *iterador;
-    //adicionar mais cenas depois (tipo quantos niveis tem)
-}TipoArvore;
-
-
-/*---------------------------FUNCOES PARA LINKED LIST---------------------------------------------*/
-
-TipoElementoLinkedList *criarElemento();
-
-TipoElementoLinkedList *criarElementoComFolha(TipoFolha *folha);
-
-int temProximo(TipoElementoLinkedList *elem);
-int temAnterior(TipoElementoLinkedList *elem);
-
-TipoLinkedList *criarList();
-int resetIterPosition(TipoLinkedList *list);
-int moverIterParaProximo(TipoLinkedList *list);
-int moverIterParaAnterior(TipoLinkedList *list);
-int tamanhoLinkedList(TipoLinkedList *list);
-
-int adicionarElementoFinal(TipoLinkedList *list, TipoElementoLinkedList *elem);
-
-
-int apagarUltimoElemento(TipoLinkedList * list);
-int freeLinkedList(TipoLinkedList *list);
-
-//debugging stuff
-void imprimirLista(TipoLinkedList *list);
-
-
-/*---------------------------FUNCOES PARA ARVORE--------------------------------------------*/
-#define maxTreeElements 1024
-
-
-TipoFolha *criarFolha();
-TipoFolha *criarFolhaComInt(int valor);
-
-TipoArvore *criarArvore();
-TipoArvore *criarArvoreComRaiz(TipoFolha *raiz);
-
-
-int adicionarFilho(TipoFolha *folhaPai, TipoFolha *folhaFilho);
-
-TipoArvore *carregarArvoreDeFicheiro(char *fileName);
-
-int freeFolha(TipoFolha *folha);
-int freeArvore(TipoArvore *arvore);
-
-void imprimirFilhos(TipoFolha *folha);
-void imprimirArvore(TipoArvore *arvore);
-void imprimirArvore_graphviz(TipoFolha *folha);
+/*---------------------------FUNCOES PARA A ARVORE---------------------------------------------*/
+int adicionarFilho(TipoFolha *parent, TipoFolha *child);
+TipoFolha *novaFolha(TipoFolha *parent);
+void imprimirGraphviz(TipoFolha *elem);
+void freeArvore(TipoFolha *elem);
+TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro);
 
 #endif

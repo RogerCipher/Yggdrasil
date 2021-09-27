@@ -28,14 +28,12 @@ int main(int argc, char *argv[])
         printf("Usage: %s <fileOfTree> <options>\n", argv[0]);
         printf("options: \n");
 
-        printf(" -i -> prints information of loaded tree\n");
         printf(" -g -> prints graphviz format of tree\n");
         error("<fileOfTree> argument not given\n");
     }
-    TipoArvore *arvore = carregarArvoreDeFicheiro(argv[1]);
+    TipoFolha *raiz = carregarArvoreDeUmFicheiro(argv[1]);
 
     //options in args
-    int optImprimirArvore = 0;
     int optImprimirGraphviz = 0;
 
     limparEcra();
@@ -46,12 +44,7 @@ int main(int argc, char *argv[])
     for(int i = 2; i < argc; i++)
     {
 
-        if(!strcmp(argv[i], "-i"))
-        {
-            optImprimirArvore = 1;
-        }
-
-        else if(!strcmp(argv[i], "-g"))
+        if(!strcmp(argv[i], "-g"))
         {
             optImprimirGraphviz = 1;
         }
@@ -63,20 +56,15 @@ int main(int argc, char *argv[])
         }
     }
 
-    if(optImprimirArvore)
-    {
-        imprimirArvore(arvore);
-    }
-
     if(optImprimirGraphviz)
     {
-        imprimirArvore_graphviz(arvore->raiz);
+        imprimirGraphviz(raiz);
     }
 
 
 
 
-    freeArvore(arvore);
+    freeArvore(raiz);
 
     printf("\nx\n");
     return 0;

@@ -18,463 +18,203 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 #include "common.h"
 
 /*---------------------------FUNCOES PARA LINKED LIST---------------------------------------------*/
-
-TipoElementoLinkedList *criarElemento()
+int adicionarFilho(TipoFolha *parent, TipoFolha *child) 
 {
-    //alocar o espaco na memoria para um elemento
-    TipoElementoLinkedList *elem = (TipoElementoLinkedList *)malloc(sizeof(TipoElementoLinkedList));
-
-    if(elem == NULL)
-    {
-        //nao conseguimos alocar memoria
-        error("couldnt alocate memory for linked list element.\n");
-    }
-
-    //meter tudo a "NULL"
-    elem->folha = NULL;
-    elem->proximo = NULL;
-    elem->anterior = NULL;
-
-    return elem;
-}
-
-
-TipoElementoLinkedList *criarElementoComFolha(TipoFolha *folha)
-{
-    TipoElementoLinkedList *elem = criarElemento();
-    elem->folha = folha;
-    return elem;
-}
-
-int temProximo(TipoElementoLinkedList *elem) //retorna 1 se tiver proximo, 0 se nao tiver
-{
-    if(elem->proximo == NULL)
-    {
+    child->parent = parent;
+    if (parent == NULL) {
+        //criamos a raiz
         return 0;
     }
-    return 1;
-}
-int temAnterior(TipoElementoLinkedList *elem)//retorna 1 se tiver anterior, 0 se nao tiver
-{
-    if(elem->anterior == NULL)
+    if (parent->children == NULL) 
     {
-        return 0;
-    }
-    return 1;
-}
-
-TipoLinkedList *criarList()
-{
-    //alocar o espaco na memoria para a linked list
-    TipoLinkedList *list = (TipoLinkedList *)malloc(sizeof(TipoLinkedList));
-
-    if(list == NULL)
+        //primeiro filho
+        parent->children = child;
+    } 
+    else 
     {
-        //nao conseguimos alocar memoria
-        error("couldnt alocate memory for linked list.\n");
-    }
-
-    //meter tudo a "NULL"
-    list->cabeca = NULL;
-    list->iterador = NULL;
-    list->indexElementoActual = -1;
-    list->len = 0;
-
-    return list;
-}
-
-int resetIterPosition(TipoLinkedList *list)
-{
-    if(list->cabeca == NULL)
-    {
-        //a lista ainda nao tem elementos, nao vamos fazer nada
-        return 0;
-    }
-
-    list->iterador = list->cabeca;
-    list->indexElementoActual = 0;
-    return 1;
-}
-
-
-int moverIterParaProximo(TipoLinkedList *list)
-{
-    if(!temProximo(list->iterador))
-    {
-        //nao ha proximo elemento
-        return 0;
-    }
-    list->iterador = list->iterador->proximo;
-    list->indexElementoActual++;
-    return 1;
-}
-
-int moverIterParaAnterior(TipoLinkedList *list)
-{
-    if(!temAnterior(list->iterador))
-    {
-        //nao ha elemento anterior (estamos na cabeca)
-        return 0;
-    }
-    list->iterador = list->iterador->anterior;
-    list->indexElementoActual--;
-    return 1;
-}
-
-int tamanhoLinkedList(TipoLinkedList *list) //da refresh e retorna o tamanho da linked list
-{
-    if(!resetIterPosition(list))
-    {
-        //a lista ainda nao tem elementos
-        return 0;
-    }
-    //dar refresh e retornar quantos elementos a linked list tem
-    int tamanho = 1;
-    while (temProximo(list->iterador))
-    {
-        moverIterParaProximo(list);
-        tamanho++;
-    }
-    list->len = tamanho;
-    return list->len;
-    
-}
-
-int adicionarElementoFinal(TipoLinkedList *list, TipoElementoLinkedList *elem)
-{
-    if(list->cabeca == NULL)
-    {
-        //estamos no primeiro elemento da lista
-        list->cabeca = elem;
-        list->iterador = list->cabeca;
-        list->indexElementoActual = 0;
-        list->len = 1;
-        return 1;
-    }
-
-    //ja existem elementos, por isso vamos mover o iterador ate ao final
-    while(temProximo(list->iterador))
-    {
-        moverIterParaProximo(list);
-    }
-
-    list->iterador->proximo = elem;
-    list->iterador->proximo->anterior = list->iterador;
-    list->len++;
-
-    resetIterPosition(list);
-
-    return 1;
-}
-
-int apagarUltimoElemento(TipoLinkedList * list)
-{
-    if(list->cabeca == NULL)
-    {
-        printf("tentativa de apagar o ultimo elemento de uma lista sem elementos\n");
-        return 0;
-    }
-
-
-    resetIterPosition(list);
-    //ir ate ao ultimo elemento
-    while(temProximo(list->iterador))
-    {
-        moverIterParaProximo(list);
-    }
-
-    //dar free da folha
-    freeFolha(list->iterador->folha);
-
-    //apagar as outras conexoes
-    if(list->iterador->anterior != NULL)
-    {
-        list->iterador->anterior->proximo = NULL;
-    }
-    list->iterador->anterior = NULL;
-
-    //dar free do elemento, seguido de dar reset do iterador e refresh do tamanho da linkedlist
-    free(list->iterador);
-    resetIterPosition(list);
-    tamanhoLinkedList(list);
-
-    return 1;
-}
-
-int freeLinkedList(TipoLinkedList *list)
-{
-    int quantidadeElementos = list->len;
-
-    list->cabeca->folha->parent->children = NULL;
-
-    for(int i = 0; i < quantidadeElementos; i++)
-    {
-        apagarUltimoElemento(list);
-    }
-
-    list->indexElementoActual = -1;
-    list->iterador = NULL;
-    list->cabeca = NULL;
-    list->len = 0;
-
-    free(list);
-    return 1;
-}
-
-
-void imprimirLista(TipoLinkedList *list)
-{
-    resetIterPosition(list);
-    if(list->cabeca == NULL)
-    {
-        //esta lista esta vazia
-    }
-    for(int i = 0; i < list->len; i++)
-    {
-        if(list->iterador->folha != NULL)
+        //nao é o primeiro filho, vamos iterar ate ao ultimo filho
+        TipoFolha *iterador = parent->children;
+        while (iterador->siblings != NULL) 
         {
-            printf("%d\n", list->iterador->folha->data.valor);
-            moverIterParaProximo(list);
+            //iterar filho a filho ate ao ultimo
+            iterador = iterador->siblings;
         }
-        else
-        {
-            //esta folha nao tem nada
-        }
+
+        //adicionar este filho como irmao do ultimo irmao actual
+        iterador->siblings = child;
     }
-}
-
-/*---------------------------FUNCOES PARA A ARVORE---------------------------------------------*/
-TipoFolha *criarFolha()
-{
-    TipoFolha *folha = (TipoFolha *)malloc(sizeof(TipoFolha));
-
-    if(folha == NULL)
-    {
-        //nao conseguimos alocar memoria
-        error("couldnt alocate memory for leaf node.\n");
-    }
-
-    folha->children = NULL;
-    folha->parent = NULL;
-    return folha;
-}
-
-TipoFolha *criarFolhaComInt(int valor)
-{
-    TipoFolha *folha = criarFolha();
-    folha->data.valor = valor;
-    return folha;
-}
-
-TipoArvore *criarArvore()
-{
-    TipoArvore *arvore = (TipoArvore *)malloc(sizeof(TipoArvore));
-    if(arvore == NULL)
-    {
-        //nao conseguimos alocar memoria
-        error("couldnt alocate memory for tree.\n");
-    }
-    arvore->raiz = NULL;
-    arvore->iterador = NULL;
-    return arvore;
-}
-
-TipoArvore *criarArvoreComRaiz(TipoFolha *raiz)
-{
-    TipoArvore *arvore = (TipoArvore *)malloc(sizeof(TipoArvore));
-    if(arvore == NULL)
-    {
-        //nao conseguimos alocar memoria
-        error("couldnt alocate memory for tree.\n");
-    }
-
-    arvore->raiz = raiz;
-    arvore->raiz->nivelDaFolha = 0;
-    arvore->iterador = arvore->raiz;
-    return arvore;
-}
-
-int adicionarFilho(TipoFolha *folhaPai, TipoFolha *folhaFilho)
-{
-    if(folhaPai->children == NULL)
-    {
-        //ainda nao existe filhos, vamos criar a lista
-        TipoLinkedList *listaFilhos = criarList();
-
-        folhaPai->children = listaFilhos;
-    }
-
-    adicionarElementoFinal(folhaPai->children, criarElementoComFolha(folhaFilho));
-
-    folhaFilho->parent = folhaPai;
-    folhaFilho->nivelDaFolha = folhaPai->nivelDaFolha+1;
-
     return 1;
 }
 
-
-TipoArvore *carregarArvoreDeFicheiro(char *fileName)
+TipoFolha *novaFolha(TipoFolha *parent) 
 {
-    char buffer[maxTreeElements*3];
-
-    FILE *fp;
-
-    fp = fopen(fileName, "r");
-    if(fp == NULL)
-    {
-        error("");
+    //criar uma nova folha
+    TipoFolha *novoElem = (TipoFolha *)malloc(sizeof(TipoFolha));
+    if (novoElem == NULL) {
+        printf("Cannot allocate memory for new tree node\n");
+        return NULL;
     }
 
-    fscanf(fp, "%s", buffer);
+    //popular a folha com NULL
+    novoElem->siblings = NULL;
+    novoElem->children = NULL;
+    novoElem->data = NULL;
 
-
-    //sabemos que a primeira vai sempre ser a raiz
-    TipoArvore *arvore = criarArvoreComRaiz(criarFolhaComInt(atoi(buffer)));
-
-    printf("raiz criada com o valor: %d\n", arvore->raiz->data.valor);
-
-    //TODO: METER O ITERADOR COMO "NODE ACTUAL" PARA O RESTO DESTA FUNCAO:
-
-    for(int i = 1; i < strlen(buffer); i++)
+    //inserir nivel da folha
+    if(parent == NULL)
     {
-        //printf("%c", buffer[i]);
-        if(buffer[i] == '(')
-        {
-            adicionarFilho(arvore->iterador, criarFolhaComInt(atoi(buffer+i+1)));
-            i++;
-
-            //ir para o ultimo filho da folha actual
-            while(temProximo(arvore->iterador->children->iterador))
-            {
-                moverIterParaProximo(arvore->iterador->children);
-            }
-            //meter o iterador da arvore igual a este filho
-            arvore->iterador = arvore->iterador->children->iterador->folha;
-
-        }
-        if(buffer[i] == ')')
-        {
-            //ir para o node "pai"
-            arvore->iterador = arvore->iterador->parent;
-        }
-    }
-
-
-
-    printf("\ncarregado:\n");
-    fclose(fp);
-
-    return arvore;
-}
-
-
-int freeFolha(TipoFolha *folha)
-{
-    if(folha->children != NULL)
-    {
-        //vamos ter que apagar os filhos primeiro
-        freeLinkedList(folha->children);
-    }
-
-    free(folha);
-
-    return 1;
-}
-
-int freeArvore(TipoArvore *arvore)
-{
-    if(arvore->raiz == NULL)
-    {
-        free(arvore);
-        return 1;
-    }
-
-    freeFolha(arvore->raiz);
-    arvore->raiz = NULL;
-    free(arvore);
-
-    return 1;
-
-}
-
-
-
-void imprimirFilhos(TipoFolha *folha)
-{
-    printf("pai: %d\n", folha->data.valor);
-
-    if(folha->children == NULL)
-    {
-        printf(" nao tem filhos\n");
-        return;
-    }
-    tamanhoLinkedList(folha->children);
-    resetIterPosition(folha->children);
-    for(int i = 0; i < folha->children->len; i++)
-    {
-        printf(" filho nr %d : %d \n", i, folha->children->iterador->folha->data.valor);
-        if(!moverIterParaProximo(folha->children))
-        {
-            break;
-        }
-    }
-    tamanhoLinkedList(folha->children);
-    resetIterPosition(folha->children);
-    
-    for(int i = 0; i < folha->children->len; i++)
-    {
-        imprimirFilhos(folha->children->iterador->folha);
-        if(!moverIterParaProximo(folha->children))
-        {
-            break;
-        }
-    }
-
-    return;
-}
-
-void imprimirArvore(TipoArvore *arvore)
-{
-    if(arvore->raiz == NULL)
-    {
-        return;
-    }
-
-    imprimirFilhos(arvore->raiz);
-    
-}
-
-// Print the tree in graphviz format
-void imprimirArvore_graphviz(TipoFolha *folha) {
-
-
-    if (folha->parent != NULL) {
-        printf("\tn%p [label = \"%d\"]\n", folha, folha->data.valor);
-        printf("\tn%p -- n%p\n", folha->parent, folha);
+        //estamos na raiz, nivel 0
+        novoElem->nivelDaFolha = 0;
     }
     else
     {
+        novoElem->nivelDaFolha = parent->nivelDaFolha +1;
+    }
+    
+    //adicionar esta folha como um filho do seu pai
+    adicionarFilho(parent, novoElem);    // TODO: Check this return value
+    return novoElem;
+}
+
+void imprimirGraphviz(TipoFolha *elem) 
+{
+    if (elem->parent == NULL) 
+    {
+        //estamos na raiz
         printf("Copy the following code to https://dreampuf.github.io/GraphvizOnline\n");
         printf("graph {\n");
-        printf("\tn%p [label = \"%d\"]\n", folha, folha->data.valor);
     }
-
-    if(folha->children != NULL)
+    if (elem->data == NULL) 
     {
-        resetIterPosition(folha->children);
-        while(temProximo(folha->children->iterador))
-        {
-            if (folha->children->iterador != NULL) {
-                imprimirArvore_graphviz(folha->children->iterador->folha);
-            }
-            moverIterParaProximo(folha->children);
-        }
-
-        //imprimir o ultimo elemento (nao tem proximo)
-        imprimirArvore_graphviz(folha->children->iterador->folha);
+        //elemento nao tem valor
+        printf("\tn%p [label = \"\"]\n", elem);
+    } 
+    else 
+    {
+        //elemento tem valor
+        printf("\tn%p [label = \"%d\"]\n", elem, elem->data->value);
     }
+    if (elem->parent != NULL) 
+    {
+        //criar ligacao do pai ao filho
+        printf("\tn%p -- n%p\n", elem->parent, elem);
+    }
+    if (elem->children != NULL) 
+    {
+        //imprimir recursivamente para cada filho
+        imprimirGraphviz(elem->children);    // imprimir primeiro filho
 
-    if (folha->parent == NULL) {
+        //iterar e ir imprimindo cada filho subsequente
+        TipoFolha *iterador = elem->children;
+        while (iterador->siblings != NULL) {
+            iterador = iterador->siblings;
+            imprimirGraphviz(iterador);
+        }
+    }
+    if (elem->parent == NULL) {
+        //fim
         printf("}\n");
     }
+}
+
+// Recursive post-order traversal of tree
+void freeArvore(TipoFolha *elem) 
+{
+    if (elem == NULL) {
+        return;
+    }
+    TipoFolha *iterador = elem->children;
+    while ((iterador != NULL) && (iterador->siblings != NULL)) {
+        freeArvore(iterador);
+        iterador = iterador->siblings;
+    }
+    elem->children = NULL;
+    if (elem->data != NULL) {
+        free(elem->data);
+    }
+    free(elem);
+}
+
+//Carregar um ficheiro que descreve uma arvore e dar return da raiz
+TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro) 
+{
+    FILE *ficheiro = fopen(nomeFicheiro, "r");
+    if (ficheiro == NULL) 
+    {
+        //algo correu mal
+        printf("Nao foi possivel abrir o ficheiro \"%s\"\n", nomeFicheiro);
+        return NULL;
+    }
+
+    TipoFolha *raiz = novaFolha(NULL);
+    TipoFolha *folhaActual = raiz;
+
+    int chInt;
+    char ch;
+    int value = 0;
+    int value_digits = 0; // Any valid value, must have at least 1 digit
+    
+    // enquanto nao chegarmos ao final do ficheiro
+    while ((chInt = fgetc(ficheiro)) != EOF) {
+        ch = (char)chInt;   // Convert char in int to char
+        if ((ch >= '0') && (ch <= '9')) 
+        {   // valid digits for value
+            value = (10*value) + ch - '0';  // Shift old value one place ot the left (in decimal form)
+            value_digits++;                 // Number of digits
+        } 
+        else if ((ch == '(') || (ch == ')')) 
+        { 
+            // Andar pela arvore
+            if (value_digits > 0) 
+            {
+                if (folhaActual->data == NULL) 
+                {
+                    folhaActual->data = (TipoData *) malloc(sizeof(TipoData));
+                }
+                folhaActual->data->value = value;
+                // dar reset a value e value_digits
+                value = 0;  
+                value_digits = 0;
+            }
+            if (ch == '(') 
+            {    
+                // adicionar um novo filho
+                folhaActual = novaFolha(folhaActual);    // add_child_node returns new child node
+            } 
+            else 
+            {            
+                // ir para o pai
+                if (folhaActual->parent == NULL) 
+                {
+                    //algo correu mal
+                    printf("O ficheiro nao descreve uma arvore \"%s\"\n", nomeFicheiro);
+
+                    //remover o que carregamos 
+                    freeArvore(raiz);    
+                    return NULL;
+                }
+
+                folhaActual = folhaActual->parent;
+            }
+        } 
+        else 
+        {
+            printf("impossivel carregar o caracter: '%02X'\n", ch);
+
+            //remover o que carregamos 
+            freeArvore(raiz);
+            return NULL;        
+        }
+    }
+    fclose(ficheiro);
+    if (raiz != folhaActual) 
+    {
+        //se nao acabarmos o ficheiro na raiz algo correu mal
+        printf("sintax do ficheiro incorrecto, nao acabamos na raiz\n");
+
+        //remover o que carregamos
+        freeArvore(raiz);
+        return NULL;
+    }
+    return raiz;
 }
