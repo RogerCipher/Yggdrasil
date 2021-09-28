@@ -20,7 +20,7 @@ typedef struct TipoF
 {
     struct TipoF *parent; //parent da folha
     struct TipoF *children; //primeiro filho desta folha
-    struct TipoF *siblings; //irmaos desta folha, aka: pointer para o proximo filho do parent
+    struct TipoF *nextSibling; //irmaos desta folha, aka: pointer para o proximo filho do parent
     
     int nivelDaFolha;
     TipoData *data; //informacao sobre a folha actual
@@ -32,5 +32,6 @@ TipoFolha *novaFolha(TipoFolha *parent);
 void imprimirGraphviz(TipoFolha *elem);
 void freeArvore(TipoFolha *elem);
 TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro);
+TipoData *minmax(TipoFolha *elemento);
 
 #endif
