@@ -62,6 +62,12 @@ int main(int argc, char *argv[])
     }
 
 
+    printf("depois do minmax:\n");
+    TipoData *final;
+    final = minmax(raiz);
+    printf("resultado final: %d", final->value);
+    imprimirGraphviz(raiz);
+
     freeArvore(raiz);
 
     printf("\nx\n");
