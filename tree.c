@@ -232,84 +232,54 @@ TipoData *minmax(TipoFolha *elemento)
     TipoFolha *iterador = elemento->children;
     TipoData *dataActual;
 
-    //ja passou um numero para cima, nos queremos manter o 
+    //queremos passar para o nos o valor do filho
     //maior numero se for max ou menor se for min, aka
     //max se for par ou 0, min se for impar
-    if(iterador->parent->nivelDaFolha % 2 == 0 || iterador->parent->nivelDaFolha == 0)
+    if(elemento->nivelDaFolha % 2 == 0 || elemento->nivelDaFolha == 0)
     {
-        printf("avaluating max player\n");
         //max player
         while(iterador != NULL)
         {
-            printf("\nmax\n");
-            
-
             dataActual = minmax(iterador);
             
-            printf("\nmax found: %d\n", dataActual->value);
-            if(iterador->data == NULL)
+            if(elemento->data == NULL)
             {
-                iterador->data = (TipoData *)malloc(sizeof(TipoData));
-                iterador->data->value = dataActual->value;
+                //se ele ainda nao tiver nada vamos simplesmente passar o primeiro
+                elemento->data = (TipoData *)malloc(sizeof(TipoData));
+                elemento->data->value = dataActual->value;
             }
-            else if(iterador->data->value < dataActual->value)
+            else if(elemento->data->value < dataActual->value)
             {
-                iterador->data->value = dataActual->value;
+                //se ja tem alguma coisa vemos se este numero e maior, se for damos rewrite
+                elemento->data->value = dataActual->value;
             }
             printf("\ncurrent max value: %d\n", iterador->data->value);
             iterador = iterador->nextSibling;
-        } 
+        }
     }
     else
     {
-        printf("avaluating min player\n");
         //min player
         while(iterador != NULL)
         {
-            printf("\nmin\n");
-
 
             dataActual = minmax(iterador);
 
-
-            printf("\nmin found: %d\n", dataActual->value);
-            if(iterador->data == NULL)
+            if(elemento->data == NULL)
             {
-                iterador->data = (TipoData *)malloc(sizeof(TipoData));
-                iterador->data->value = dataActual->value;
+                //se ele ainda nao tiver nada vamos simplesmente passar o primeiro
+                elemento->data = (TipoData *)malloc(sizeof(TipoData));
+                elemento->data->value = dataActual->value;
             }
-            else if(iterador->data->value > dataActual->value)
+            else if(elemento->data->value > dataActual->value)
             {
-                iterador->data->value = dataActual->value;
+                //se ja tem alguma coisa vemos se este numero e maior, se for damos rewrite
+                elemento->data->value = dataActual->value;
             }
             printf("\ncurrent min value: %d\n", iterador->data->value);
             iterador = iterador->nextSibling;
-        } 
-    }
-
-    if(elemento->parent == NULL)
-    {
-        //se chegarmos a raiz basta fazermos o max do resultado final:
-        
-        iterador = elemento->children;
-        while(iterador != NULL)
-        {
-            if(elemento->data == NULL)
-            {
-                elemento->data = (TipoData *)malloc(sizeof(TipoData));
-                elemento->data->value = elemento->children->data->value;
-            }
-            else
-            {
-                if(iterador->data->value > elemento->data->value)
-                {
-                    elemento->data->value = iterador->data->value;
-                }
-            }
-            iterador = iterador->nextSibling;
         }
-        return elemento->data;
     }
 
-    return dataActual;
+    return elemento->data;
 }
