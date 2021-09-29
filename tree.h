@@ -11,7 +11,6 @@ typedef struct TipoD
     int value;
 }TipoData;
 
-
 /*---------------------------ESTRUTURAS PARA A ARVORE---------------------------------------------*/
 
 

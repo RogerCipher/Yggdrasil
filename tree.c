@@ -152,8 +152,9 @@ TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro)
 
     int chInt;
     char ch;
-    int value = 0;
-    int value_digits = 0; // Any valid value, must have at least 1 digit
+    int value = 0; 
+    int value_digits = 0; // qualquer valor valido precisa de pelo menos 1 digito
+    int isNegative = 1; //diz-nos se o valor é positivo ou negativo (tem o valor de -1 ou 1)
     
     // enquanto nao chegarmos ao final do ficheiro
     while ((chInt = fgetc(ficheiro)) != EOF) {
@@ -163,7 +164,12 @@ TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro)
         {   // valid digits for value
             value = (10*value) + ch - '0';  // Shift old value one place ot the left (in decimal form)
             value_digits++;                 // Number of digits
-        } 
+        }
+        else if((value_digits == 0) && (ch == '-'))
+        {
+            //trata-se de um numero negativo
+            isNegative = -1;
+        }
         else if ((ch == '(') || (ch == ')')) 
         { 
             // Andar pela arvore
@@ -173,8 +179,12 @@ TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro)
                 {
                     folhaActual->data = (TipoData *) malloc(sizeof(TipoData));
                 }
-                folhaActual->data->value = value;
-                // dar reset a value e value_digits
+
+                folhaActual->data->value = value * isNegative;
+
+
+                // dar reset a value, value_digits e isnegative
+                isNegative = 1;
                 value = 0;  
                 value_digits = 0;
             }
