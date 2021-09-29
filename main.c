@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
     {
         imprimirGraphviz(raiz);
     }
+    minmax(raiz);
+    imprimirGraphviz(raiz);
 
     freeArvore(raiz);
 

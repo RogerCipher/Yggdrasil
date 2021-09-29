@@ -158,6 +158,7 @@ TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro)
     // enquanto nao chegarmos ao final do ficheiro
     while ((chInt = fgetc(ficheiro)) != EOF) {
         ch = (char)chInt;   // Convert char in int to char
+
         if ((ch >= '0') && (ch <= '9')) 
         {   // valid digits for value
             value = (10*value) + ch - '0';  // Shift old value one place ot the left (in decimal form)
@@ -180,7 +181,7 @@ TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro)
             if (ch == '(') 
             {    
                 // adicionar um novo filho
-                folhaActual = novaFolha(folhaActual);    // add_child_node returns new child node
+                folhaActual = novaFolha(folhaActual);
             } 
             else 
             {            
@@ -253,7 +254,7 @@ TipoData *minmax(TipoFolha *elemento)
                 //se ja tem alguma coisa vemos se este numero e maior, se for damos rewrite
                 elemento->data->value = dataActual->value;
             }
-            printf("\ncurrent max value: %d\n", iterador->data->value);
+
             iterador = iterador->nextSibling;
         }
     }
@@ -276,7 +277,7 @@ TipoData *minmax(TipoFolha *elemento)
                 //se ja tem alguma coisa vemos se este numero e maior, se for damos rewrite
                 elemento->data->value = dataActual->value;
             }
-            printf("\ncurrent min value: %d\n", iterador->data->value);
+
             iterador = iterador->nextSibling;
         }
     }
