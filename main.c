@@ -15,9 +15,10 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 #include <stdlib.h>
 #include <string.h>
 
+#define INFINITY 2147483647
+
 #include "tree.h" //para as arvores
 #include "common.h" //para tudo o que e comum
-
 
 int main(int argc, char *argv[])
 {
@@ -60,7 +61,9 @@ int main(int argc, char *argv[])
     {
         imprimirGraphviz(raiz);
     }
-    minmax(raiz);
+
+
+    alphaBeta(raiz);
     imprimirGraphviz(raiz);
 
     freeArvore(raiz);
