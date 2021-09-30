@@ -8,6 +8,11 @@
 //estrutura para a data que queremos guardar em cada folha da arvore
 typedef struct TipoD
 {
+    //valor associado a alpha beta prunning
+    int alpha;
+    int beta;
+
+    //valor associado a folha
     int value;
 }TipoData;
 
@@ -32,5 +37,6 @@ void imprimirGraphviz(TipoFolha *elem);
 void freeArvore(TipoFolha *elem);
 TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro);
 TipoData *minmax(TipoFolha *elemento);
+TipoData *alphaBeta(TipoFolha *elemento);
 
 #endif
