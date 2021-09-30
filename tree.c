@@ -14,6 +14,10 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 #include <stdlib.h>
 #include <string.h>
 
+
+#define INFINITY 2147483647
+
+
 #include "tree.h"
 #include "common.h"
 
@@ -93,7 +97,23 @@ void imprimirGraphviz(TipoFolha *elem)
     else 
     {
         //elemento tem valor
-        printf("\tn%p [label = \"%d\"]\n", elem, elem->data->value);
+        if(elem->data->alpha == -INFINITY && elem->data->beta == INFINITY)
+        {
+            printf("\tn%p [label = \"%d, alpha: -∞ beta: ∞\"]\n", elem, elem->data->value);
+        }
+        else if(elem->data->alpha == -INFINITY)
+        {
+            printf("\tn%p [label = \"%d, alpha: -∞ beta: %d\"]\n", elem, elem->data->value, elem->data->beta);
+        }
+        else if(elem->data->beta == INFINITY)
+        {
+            printf("\tn%p [label = \"%d, alpha: %d beta: ∞\"]\n", elem, elem->data->value, elem->data->alpha);
+        }
+        else
+        {
+            printf("\tn%p [label = \"%d, alpha: %d beta: %d\"]\n", elem, elem->data->value, elem->data->alpha, elem->data->beta);
+        }
+        
     }
     if (elem->parent != NULL) 
     {
@@ -291,6 +311,87 @@ TipoData *minmax(TipoFolha *elemento)
             iterador = iterador->nextSibling;
         }
     }
+
+    return elemento->data;
+}
+
+TipoData *alphaBeta(TipoFolha *elemento)
+{
+    if(elemento->parent == NULL && elemento->data == NULL)
+    {
+        //estamos na raiz, vamos inicializar os valores do alpha beta
+        elemento->data = (TipoData *)malloc(sizeof(TipoData));
+        elemento->data->alpha = -INFINITY;
+        elemento->data->beta = INFINITY;
+    }
+    else if(elemento->data == NULL)
+    {
+        //se estamos numa folha que ainda nao passamos vamos inicializar a data
+        //com o alpha e o beta do seu pai
+        elemento->data = (TipoData *)malloc(sizeof(TipoData));
+        elemento->data->alpha = elemento->parent->data->alpha;
+        elemento->data->beta = elemento->parent->data->beta;
+    }
+    else if(elemento->children == NULL)
+    {
+        //se nao tem filhos vamos so dar return desta data
+        elemento->data->alpha = elemento->data->value;
+        elemento->data->beta = elemento->data->value;
+        return elemento->data;
+    }
+
+    TipoFolha *iterador = elemento->children;
+    TipoData *dataActual;
+
+    //queremos ver o alpha para o max player (nivel da folha par ou 0)
+    //queremos ver o beta para o min player (nivel da folha impar)
+    if(elemento->nivelDaFolha % 2 == 0 || elemento->nivelDaFolha == 0)
+    {
+        //max player (olhamos para o alpha)
+        while(iterador != NULL)
+        {
+            dataActual = alphaBeta(iterador);
+            
+            if(elemento->data->alpha < dataActual->beta)
+            {
+                //se ja tem alguma coisa vemos se este numero e maior, se for damos rewrite
+                elemento->data->alpha = dataActual->beta;
+                elemento->data->value = dataActual->beta;
+            }
+            if(elemento->data->alpha >= elemento->data->beta)
+            {
+                //se num elemento tivermos o alpha >= beta damos prune
+                break;
+            }
+
+            iterador = iterador->nextSibling;
+        }
+    }
+    else
+    {
+        //min player (olhamos para o beta)
+
+        while(iterador != NULL)
+        {
+            dataActual = alphaBeta(iterador);
+            
+            if(elemento->data->beta > dataActual->alpha)
+            {
+                //se ja tem alguma coisa vemos se este numero e menor, se for damos rewrite
+                elemento->data->beta = dataActual->alpha;
+                elemento->data->value = dataActual->alpha;
+            }
+            if(elemento->data->alpha >= elemento->data->beta)
+            {
+                //se num elemento tivermos o alpha >= beta damos prune
+                break;
+            }
+
+            iterador = iterador->nextSibling;
+        }
+    }
+    
+
 
     return elemento->data;
 }
