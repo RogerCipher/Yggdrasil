@@ -64,6 +64,7 @@ TipoFolha *novaFolha(TipoFolha *parent)
     novoElem->nextSibling = NULL;
     novoElem->children = NULL;
     novoElem->data = NULL;
+    novoElem->pruned = 1;
 
     //inserir nivel da folha
     if(parent == NULL)
@@ -97,24 +98,9 @@ void imprimirGraphviz(TipoFolha *elem)
     else 
     {
         //elemento tem valor
-        if(elem->data->alpha == -INFINITY && elem->data->beta == INFINITY)
-        {
-            printf("\tn%p [label = \"%d, alpha: -∞ beta: ∞\"]\n", elem, elem->data->value);
-        }
-        else if(elem->data->alpha == -INFINITY)
-        {
-            printf("\tn%p [label = \"%d, alpha: -∞ beta: %d\"]\n", elem, elem->data->value, elem->data->beta);
-        }
-        else if(elem->data->beta == INFINITY)
-        {
-            printf("\tn%p [label = \"%d, alpha: %d beta: ∞\"]\n", elem, elem->data->value, elem->data->alpha);
-        }
-        else
-        {
-            printf("\tn%p [label = \"%d, alpha: %d beta: %d\"]\n", elem, elem->data->value, elem->data->alpha, elem->data->beta);
-        }
-        
+        printf("\tn%p [label = \"%d\"]\n", elem, elem->data->value);
     }
+        
     if (elem->parent != NULL) 
     {
         //criar ligacao do pai ao filho
@@ -134,6 +120,72 @@ void imprimirGraphviz(TipoFolha *elem)
     }
     if (elem->parent == NULL) {
         //fim
+        printf("}\n");
+    }
+}
+
+void imprimirGraphviz_WithPrunes(TipoFolha *elem)
+{
+    if (elem->parent == NULL) 
+    {
+        //estamos na raiz
+        printf("Copy the following code to https://dreampuf.github.io/GraphvizOnline\n");
+        printf("graph {\n");
+    }
+    if (elem->data == NULL || elem->pruned) 
+    {
+        //elemento nao tem valor
+        printf("\tn%p [label = \"N/A\"]\n", elem);
+    } 
+    else 
+    {
+        //elemento é uma das folhas sem filhos vamos apenas imprimir o seu valor real
+        if(elem->children == NULL)
+        {
+            printf("\tn%p [label = \"%d\"]\n", elem, elem->data->value);
+        }
+        else
+        {
+            //elemento tem valor
+            if(elem->data->alpha == -INFINITY && elem->data->beta == INFINITY)
+            {
+                printf("\tn%p [label = \"alpha: -∞ beta: ∞\"]\n", elem);
+            }
+            else if(elem->data->alpha == -INFINITY)
+            {
+                printf("\tn%p [label = \"alpha: -∞ beta: %d\"]\n", elem, elem->data->beta);
+            }
+            else if(elem->data->beta == INFINITY)
+            {
+                printf("\tn%p [label = \"alpha: %d beta: ∞\"]\n", elem, elem->data->alpha);
+            }
+            else
+            {
+                printf("\tn%p [label = \"alpha: %d beta: %d\"]\n", elem, elem->data->alpha, elem->data->beta);
+            }
+        }
+
+    }
+    if (elem->parent != NULL) 
+    {
+        //criar ligacao do pai ao filho
+        printf("\tn%p -- n%p\n", elem->parent, elem);
+    }
+    if (elem->children != NULL) 
+    {
+        //imprimir recursivamente para cada filho
+        imprimirGraphviz_WithPrunes(elem->children);    // imprimir primeiro filho
+
+        //iterar e ir imprimindo cada filho subsequente
+        TipoFolha *iterador = elem->children;
+        while (iterador->nextSibling != NULL) {
+            iterador = iterador->nextSibling;
+            imprimirGraphviz_WithPrunes(iterador);
+        }
+    }
+    if (elem->parent == NULL) {
+        //fim
+        printf("\tn%p [label = \"valor: %d\"]\n", elem, elem->data->value);
         printf("}\n");
     }
 }
@@ -323,6 +375,7 @@ TipoData *alphaBeta(TipoFolha *elemento)
         elemento->data = (TipoData *)malloc(sizeof(TipoData));
         elemento->data->alpha = -INFINITY;
         elemento->data->beta = INFINITY;
+        elemento->pruned = 0;
     }
     else if(elemento->data == NULL)
     {
@@ -331,12 +384,14 @@ TipoData *alphaBeta(TipoFolha *elemento)
         elemento->data = (TipoData *)malloc(sizeof(TipoData));
         elemento->data->alpha = elemento->parent->data->alpha;
         elemento->data->beta = elemento->parent->data->beta;
+        elemento->pruned = 0;
     }
     else if(elemento->children == NULL)
     {
         //se nao tem filhos vamos so dar return desta data
         elemento->data->alpha = elemento->data->value;
         elemento->data->beta = elemento->data->value;
+        elemento->pruned = 0;
         return elemento->data;
     }
 
@@ -357,11 +412,16 @@ TipoData *alphaBeta(TipoFolha *elemento)
                 //se ja tem alguma coisa vemos se este numero e maior, se for damos rewrite
                 elemento->data->alpha = dataActual->beta;
                 elemento->data->value = dataActual->beta;
+                
             }
             if(elemento->data->alpha >= elemento->data->beta)
             {
                 //se num elemento tivermos o alpha >= beta damos prune
                 break;
+            }
+            else
+            {
+                elemento->pruned = 0;
             }
 
             iterador = iterador->nextSibling;
@@ -385,6 +445,10 @@ TipoData *alphaBeta(TipoFolha *elemento)
             {
                 //se num elemento tivermos o alpha >= beta damos prune
                 break;
+            }
+            else
+            {
+                elemento->pruned = 0;
             }
 
             iterador = iterador->nextSibling;

@@ -63,8 +63,10 @@ int main(int argc, char *argv[])
     }
 
 
-    alphaBeta(raiz);
-    imprimirGraphviz(raiz);
+
+    /*--ALPHA BETA DEBUGGING STUFF-*/
+    //alphaBeta(raiz);
+    //imprimirGraphviz_WithPrunes(raiz);
 
     freeArvore(raiz);
 

@@ -8,7 +8,7 @@
 //estrutura para a data que queremos guardar em cada folha da arvore
 typedef struct TipoD
 {
-    //valor associado a alpha beta prunning
+    //valores associado a alpha beta prunning
     int alpha;
     int beta;
 
@@ -28,15 +28,19 @@ typedef struct TipoF
     
     int nivelDaFolha;
     TipoData *data; //informacao sobre a folha actual
+
+    int pruned; //informacao sobre se este elemento foi pruned (alphabeta prunning)
 }TipoFolha;
 
 /*---------------------------FUNCOES PARA A ARVORE---------------------------------------------*/
 int adicionarFilho(TipoFolha *parent, TipoFolha *child);
 TipoFolha *novaFolha(TipoFolha *parent);
 void imprimirGraphviz(TipoFolha *elem);
+void imprimirGraphviz_WithPrunes(TipoFolha *elem);
 void freeArvore(TipoFolha *elem);
 TipoFolha *carregarArvoreDeUmFicheiro(char *nomeFicheiro);
 TipoData *minmax(TipoFolha *elemento);
 TipoData *alphaBeta(TipoFolha *elemento);
+
 
 #endif
