@@ -29,13 +29,17 @@ int main(int argc, char *argv[])
         printf("Usage: %s <fileOfTree> <options>\n", argv[0]);
         printf("options: \n");
 
-        printf(" -g -> prints graphviz format of tree\n");
+        printf(" -g -> prints graphviz format of tree in the file given\n");
+        printf(" -m -> does minmax on the tree and gives a graphviz of its final form\n");
+        printf(" -ab -> does alphabeta prunning and gives a graphviz of its final form\n");
         error("<fileOfTree> argument not given\n");
     }
     TipoFolha *raiz = carregarArvoreDeUmFicheiro(argv[1]);
 
     //options in args
     int optImprimirGraphviz = 0;
+    int optMinMax = 0;
+    int optAlphaBeta = 0;
 
     limparEcra();
     mostrarBanner();
@@ -49,6 +53,15 @@ int main(int argc, char *argv[])
         {
             optImprimirGraphviz = 1;
         }
+        else if (!strcmp(argv[i], "-m"))
+        {
+            optMinMax = 1;
+        }
+        else if (!strcmp(argv[i], "-ab"))
+        {
+            optAlphaBeta = 1;
+        }
+        
 
         else
         {
@@ -62,11 +75,21 @@ int main(int argc, char *argv[])
         imprimirGraphviz(raiz);
     }
 
+    if(optMinMax)
+    {
+        minmax(raiz);
+        printf("\n\n------------- Tree after min-max: -------------\n");
+        imprimirGraphviz(raiz);
+    }
+    if(optAlphaBeta)
+    {
+        alphaBeta(raiz);
+        printf("\n\n------------- Tree after alpha-beta prunning: -------------\n");
+        imprimirGraphviz_WithPrunes(raiz);
+    }
 
 
-    /*--ALPHA BETA DEBUGGING STUFF-*/
-    //alphaBeta(raiz);
-    //imprimirGraphviz_WithPrunes(raiz);
+
 
     freeArvore(raiz);
 
