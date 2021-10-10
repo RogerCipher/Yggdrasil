@@ -1,5 +1,5 @@
 # Yggdrasil
-A tree in C, for MiniMax, Alpha–beta pruning, Huffman coding and generally messing around
+A tree in C, for MiniMax, Alpha–beta pruning, Huffman coding and generally messing around.
 
 Stuff implemented in this project (so far):
 |function|status|where 
