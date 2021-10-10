@@ -1,11 +1,30 @@
 # Yggdrasil
-A tree in C, for minmax, alpha beta, huffman encoding and generally messing around
+A tree in C, for MiniMax, Alpha–beta pruning, Huffman coding and generally messing around
 
-the way Im compilling this: $ gcc -Wall -o main main.c tree.c common.c
+Stuff implemented in this project (so far):
+|function|status|where 
+|--|--|--|
+|Random generated trees|✅ Implemented|treeGen.c|
+|MiniMax|✅ Implemented|main.c|
+|Alpha–beta pruning|✅ Implemented|main.c|
+|Huffman coding|⭕ Not Implemented|N/A|
 
-New! -> Random tree generator (treeGen.c) compiled with: $ gcc -Wall -o treeGen treeGen.c
+the way I'm compiling this: 
+$ `gcc -Wall -o main main.c tree.c common.c`
+
+*main* will take at least one argument, the name of the file in which the the tree is (for example testTree.txt), to run a simple test do:
+
+$ `./main "testTree.txt" -g`
+
+this will print the tree that's in the "testTree.txt" file in [graphviz](https://dreampuf.github.io/GraphvizOnline) format
+## Random tree generator (treeGen.c)
+
+compiled with: $ `gcc -Wall -o treeGen treeGen.c`
 
 treeGen takes 3 arguments:
- the name of the file to create/rewrite with the tree
- the maximum number of children per node
- the maximum number of the leafs of the tree
+* the name of the file to create/rewrite with the tree
+* the maximum number of children per node
+* the maximum number of the leafs of the tree
+
+example: $ `./treeGen "testTree.txt" 3 3`
+
