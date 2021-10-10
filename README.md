@@ -17,7 +17,7 @@ $ `gcc -Wall -o main main.c tree.c common.c`
 to run a simple test do:
 $ `./main "testTree.txt" -g`
 
-this will print the tree that's in the "testTree.txt" file in [graphviz](https://dreampuf.github.io/GraphvizOnline) format
+this will print the tree that's in the "testTree.txt" file in [graphviz](https://dreampuf.github.io/GraphvizOnline) format.
 ## Random tree generator (treeGen.c)
 
 compiled with: $ `gcc -Wall -o treeGen treeGen.c`
