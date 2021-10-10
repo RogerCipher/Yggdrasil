@@ -12,8 +12,9 @@ Stuff implemented in this project (so far):
 the way I'm compiling this: 
 $ `gcc -Wall -o main main.c tree.c common.c`
 
-*main* will take at least one argument, the name of the file in which the the tree is (for example testTree.txt), to run a simple test do:
+*main* will take at least one argument, the name of the file in which the the tree is (for example testTree.txt).
 
+to run a simple test do:
 $ `./main "testTree.txt" -g`
 
 this will print the tree that's in the "testTree.txt" file in [graphviz](https://dreampuf.github.io/GraphvizOnline) format
