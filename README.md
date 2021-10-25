@@ -1,5 +1,5 @@
 # Yggdrasil
-A tree in C, for MiniMax, Alpha–beta pruning, Huffman coding and generally messing around.
+A tree in C, for MiniMax, Alpha–beta pruning and generally messing around.
 
 Stuff implemented in this project (so far):
 |function|status|where 
@@ -7,7 +7,7 @@ Stuff implemented in this project (so far):
 |Random generated trees|✅ Implemented|treeGen.c|
 |MiniMax|✅ Implemented|main.c|
 |Alpha–beta pruning|✅ Implemented|main.c|
-|Huffman coding|⭕ Implementing|huffman.c|
+|Huffman coding|⭕ moved to another repo|N/A|
 
 the way I'm compiling this: 
 $ `gcc -Wall -o main main.c minMaxAndAlphaBeta.c common.c`
