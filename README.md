@@ -7,10 +7,10 @@ Stuff implemented in this project (so far):
 |Random generated trees|✅ Implemented|treeGen.c|
 |MiniMax|✅ Implemented|main.c|
 |Alpha–beta pruning|✅ Implemented|main.c|
-|Huffman coding|⭕ Not Implemented|N/A|
+|Huffman coding|⭕ Implementing|huffman.c|
 
 the way I'm compiling this: 
-$ `gcc -Wall -o main main.c tree.c common.c`
+$ `gcc -Wall -o main main.c minMaxAndAlphaBeta.c common.c`
 
 *main* will take at least one argument, the name of the file in which the the tree is (for example testTree.txt).
 

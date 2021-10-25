@@ -18,7 +18,7 @@ by: Rogério Chaves (AKA CandyCrayon), 2021
 #define INFINITY 2147483647
 
 
-#include "tree.h"
+#include "minMaxAndAlphaBeta.h"
 #include "common.h"
 
 /*---------------------------FUNCOES PARA LINKED LIST---------------------------------------------*/
