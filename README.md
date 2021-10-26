@@ -7,7 +7,7 @@ Stuff implemented in this project (so far):
 |Random generated trees|✅ Implemented|treeGen.c|
 |MiniMax|✅ Implemented|main.c|
 |Alpha–beta pruning|✅ Implemented|main.c|
-|Huffman coding|⭕ moved to another repo|N/A|
+|Huffman coding|⭕ moved to another repo|[Ymir repo](https://github.com/RogerCipher/Ymir)|
 
 the way I'm compiling this: 
 $ `gcc -Wall -o main main.c minMaxAndAlphaBeta.c common.c`
