@@ -12,7 +12,7 @@ Stuff implemented in this project (so far):
 the way I'm compiling this: 
 $ `gcc -Wall -o main main.c minMaxAndAlphaBeta.c common.c`
 
-*main* will take at least one argument, the name of the file in which the the tree is (for example testTree.txt).
+*main* will take at least one argument, the name of the file in which the the tree (in bracket representation) is.
 
 to run a simple test do:
 $ `./main "testTree.txt" -g`
