@@ -1,5 +1,5 @@
 # Yggdrasil
-A tree in C, for MiniMax, Alpha–beta pruning and generally messing around.
+### A tree in C, for MiniMax, Alpha–beta pruning and generally messing around.
 
 Stuff implemented in this project (so far):
 |function|status|where 
@@ -22,10 +22,26 @@ this will print the tree that's in the "testTree.txt" file in [graphviz](https:/
 
 compiled with: $ `gcc -Wall -o treeGen treeGen.c`
 
-treeGen takes 3 arguments:
+treeGen takes 3 or 5 arguments:
 * the name of the file to create/rewrite with the tree
 * the maximum number of children per node
-* the maximum number of the leafs of the tree
+* the maximum depth of the tree
+---[OPTIONALLY]---
+* the minimum leaf value
+* the maximum leaf value
+(if no values are given as the maximum and minimum value of the leafs it will use 0 as min and 9 as max values)
 
-example: $ `./treeGen "testTree.txt" 3 3`
+examples:
+##### generate a tree to file "testTree.txt" with:
+ * maximum number of children per node = 3
+ * the maximum depth of the tree = 2
+ $ `./treeGen "testTree.txt" 3 2`
+
+##### generate a tree to file "testTree.txt" with:
+ * maximum number of children per node = 3
+ * the maximum depth of the tree = 2
+ * the minimum value of a leaf node = -10
+ * the maximum value of a leaf node = 10
+ $ `./treeGen "testTree.txt" 3 2 -10 10`
+
 
