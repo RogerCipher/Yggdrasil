@@ -26,9 +26,12 @@ treeGen takes 3 or 5 arguments:
 * the name of the file to create/rewrite with the tree
 * the maximum number of children per node
 * the maximum depth of the tree
+
 ---[OPTIONALLY]---
+
 * the minimum leaf value
 * the maximum leaf value
+
 (if no values are given as the maximum and minimum value of the leafs it will use 0 as min and 9 as max values)
 
 examples:
