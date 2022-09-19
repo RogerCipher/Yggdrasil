@@ -38,6 +38,7 @@ examples:
 ##### generate a tree to file "testTree.txt" with:
  * maximum number of children per node = 3
  * the maximum depth of the tree = 2
+ 
  $ `./treeGen "testTree.txt" 3 2`
 
 ##### generate a tree to file "testTree.txt" with:
@@ -45,6 +46,7 @@ examples:
  * the maximum depth of the tree = 2
  * the minimum value of a leaf node = -10
  * the maximum value of a leaf node = 10
+ 
  $ `./treeGen "testTree.txt" 3 2 -10 10`
 
 
